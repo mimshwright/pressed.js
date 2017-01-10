@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>isKeyDown.js test</title>
+    <script src="../lib/keyIsDown.js"></script>
+  </head>
+  <body>
+    <main>
+      <h1>keyIsDown.js</h1>
+
+      <h2>Currently pressed keys:</h2>
+      <p id="pressedKeyList"></p>
+
+      <h2>Appears when Shift + L are pressed together:</h2>
+      <p id="all"></p>
+
+      <h2>Detects any vowel (A, E, I, O, U):</h2>
+      <p id="any"></p>
+    </main>
+    <script type="text/javascript">
+      var pressedKeyList = document.getElementById("pressedKeyList")
+      var keyIsDown = keyIsDown.default;
+      var all = document.getElementById("all")
+      var any = document.getElementById("any")
+      keyIsDown.start();
+
+      function onFrame() {
+        // console.log(keyIsDown.list);
+        var emptyString = '...'
+
+        var downKeys = Object.keys(keyIsDown.list)
+        pressedKeyList.innerHTML = downKeys.length ? downKeys : emptyString;
+        window.requestAnimationFrame(onFrame)
+
+        all.innerHTML = keyIsDown.all(76, 16) ? "Combo!" : emptyString;
+
+        any.innerHTML = keyIsDown.any(65, 69, 73, 79, 85) ? "Vowel detected." : emptyString;
+      }
+      window.requestAnimationFrame(onFrame)
+    </script>
+  </body>
+</html>

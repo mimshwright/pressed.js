@@ -33,4 +33,7 @@ console.log(keyIsDown.list) // ["a", "cmd"]
 
 ```
 
+## Node
+This code will not work outside of a browser environment. You may want to check out [keypress](https://www.npmjs.com/package/keypress).
+
 [![Standard - JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
