@@ -29,7 +29,7 @@
         // console.log(keyIsDown.list);
         var emptyString = '...'
 
-        var downKeys = Object.keys(keyIsDown.list)
+        var downKeys = keyIsDown.listAllKeys()
         pressedKeyList.innerHTML = downKeys.length ? downKeys : emptyString;
         window.requestAnimationFrame(onFrame)
 

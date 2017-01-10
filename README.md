@@ -5,31 +5,21 @@ Tracks which keys are currently pressed down.
 ## Usage
 
 ```
-// Use a string to check if a key is currently pressed.
-if (keyIsDown('a')) {
-  console.log('"A" key is currently pressed.')
-}
-
-// Check modifier keys by string
-if (keyIsDown('cmd')) {
-  console.log('"Command" key is currently pressed.')
-}
-
-// Check multiple keys at once
-if (keyIsDown.all('cmd', 'a')) {
-  console.log('Both "Command" and "A" are currently pressed.')
-}
-if (keyIsDown.any('cmd', 'a')) {
-  console.log('At least one of the keys "Command" or "A" is currently pressed.')
-}
-
-// Use a int to check for a key code.
+// Check for a key code.
 if (keyIsDown(65)) {
   console.log('"A" key is currently pressed.')
 }
 
+// Check multiple keys at once
+if (keyIsDown.all(76, 16)) {
+  console.log('Both "Shift" and "L" are currently pressed.')
+}
+if (keyIsDown.any(65, 69, 73, 79, 85)) {
+  console.log('At least one vowel key is currently pressed.')
+}
+
 // List all keys currently pressed.
-console.log(keyIsDown.list) // ["a", "cmd"]
+console.log(keyIsDown.listAllKeys()) // ['76', '16']
 
 ```
 

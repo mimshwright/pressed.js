@@ -72,9 +72,9 @@ test('Module:keyIsDown', (module) => {
     keyIsDown.start(emitter)
     // hack list
     vowels.map(key => keyIsDown.list[key] = true)
-    assert.deepEquals(keyIsDown.listAllKeys(), vowels.map(code => code.toString()), 'listAllKeys() returns an array of all keys down')
+    assert.deepEquals(keyIsDown.listAllKeys(), vowels, 'listAllKeys() returns an array of all keys down')
     delete keyIsDown.list[65]
-    assert.deepEquals(keyIsDown.listAllKeys(), vowels.slice(1).map(code => code.toString()), 'listAllKeys() returns an array of all keys down')
+    assert.deepEquals(keyIsDown.listAllKeys(), vowels.slice(1), 'listAllKeys() returns an array of all keys down')
     keyIsDown.resetList()
     assert.deepEquals(keyIsDown.listAllKeys(), [], 'listAllKeys() returns an array of all keys down')
     keyIsDown.stop(emitter)
