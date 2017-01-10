@@ -66,6 +66,22 @@ test('Module:keyIsDown', (module) => {
     assert.end()
   })
 
+  test('keyIsDown.listAllKeys()', (assert) => {
+    assert.ok(keyIsDown.listAllKeys instanceof Function, 'keyIsDown.listAllKeys() is a function')
+
+    keyIsDown.start(emitter)
+    // hack list
+    vowels.map(key => keyIsDown.list[key] = true)
+    assert.deepEquals(keyIsDown.listAllKeys(), vowels.map(code => code.toString()), 'listAllKeys() returns an array of all keys down')
+    delete keyIsDown.list[65]
+    assert.deepEquals(keyIsDown.listAllKeys(), vowels.slice(1).map(code => code.toString()), 'listAllKeys() returns an array of all keys down')
+    keyIsDown.resetList()
+    assert.deepEquals(keyIsDown.listAllKeys(), [], 'listAllKeys() returns an array of all keys down')
+    keyIsDown.stop(emitter)
+
+    assert.end()
+  })
+
   test('keyIsDown.any()', (assert) => {
     assert.ok(keyIsDown.any instanceof Function, 'keyIsDown.any() is a function')
     assert.throws(() => keyIsDown.any(), 'Throws an error if start() hasn\'t been called')

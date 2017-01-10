@@ -19,6 +19,8 @@ keyIsDown.any = (...keys) => {
   return keys.reduce((defined, key) => defined || list[key] !== undefined, false)
 }
 
+keyIsDown.listAllKeys = () => Object.keys(list)
+
 keyIsDown.start = (eventEmitter) => {
   if (!isListening) {
     if (!eventEmitter && undefined !== window) {
