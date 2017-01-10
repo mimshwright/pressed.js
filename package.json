@@ -26,5 +26,8 @@
     "build": "babel src -d lib",
     "watch": "babel src -d lib --watch",
     "start": "npm run fix && npm run test && npm run build"
+  },
+  "dependencies": {
+    "keycode": "^2.1.8"
   }
 }
