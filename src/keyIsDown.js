@@ -7,11 +7,15 @@ const keyIsDown = (key) => {
   checkForListener()
 
   if (typeof (key) === 'string') {
-    key = keycode(key)
+    const code = keycode(key)
+    if (isNaN(code)) {
+      throw new Error(key + ' is not a supported key name.')
+    }
+    key = code
   }
 
   if (isNaN(key)) {
-    throw new Error('`key` must be either an integer key code or a string')
+    throw new Error('`key` must be either an integer key code or a string.')
   }
 
   return list[key] !== undefined

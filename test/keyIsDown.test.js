@@ -47,13 +47,15 @@ test('Module:keyIsDown', (module) => {
     assert.equal(keyIsDown('cmd'), true, 'String representation of modifier keys works.')
     assert.equal(keyIsDown('⌘'), true, 'Symbol representation of modifier keys works.')
     keyIsDown.resetList()
-    
+
     keyIsDown.list[93] = true // right cmd or windows
     assert.equal(keyIsDown('⌘'), false, 'String representation of modifier keys default to left key.')
     assert.equal(keyIsDown('left command'), false, 'Left command doesn\'t register right command key.')
     assert.equal(keyIsDown('right command'), true, 'Right command does register right command key.')
 
     assert.throws(() => keyIsDown({}), 'keyIsDown() throws an error if parameter isn\'t a string or number.')
+    assert.throws(() => keyIsDown('BOGUS KEY'), 'Bogus key name throws.')
+    assert.doesNotThrow(() => keyIsDown(99999), 'Bogus key code doesn\'t throw because it\'s hard to tell what\'s bogus!')
 
     keyIsDown.stop(emitter)
 
