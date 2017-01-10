@@ -57,7 +57,7 @@ test('Module:keyIsDown', (module) => {
 
     keyIsDown.start(emitter)
     // hack list
-    vowels.map(key => keyIsDown.list[key] = true)
+    vowels.map(key => { keyIsDown.list[key] = true })
     assert.ok(keyIsDown.all(...vowels), 'keyIsDown.all() is true when all values are down')
     delete keyIsDown.list[65]
     assert.notOk(keyIsDown.all(...vowels), 'keyIsDown.all() is false if any values are not down')
@@ -71,7 +71,7 @@ test('Module:keyIsDown', (module) => {
 
     keyIsDown.start(emitter)
     // hack list
-    vowels.map(key => keyIsDown.list[key] = true)
+    vowels.map(key => { keyIsDown.list[key] = true } )
     assert.deepEquals(keyIsDown.listAllKeys(), vowels, 'listAllKeys() returns an array of all keys down')
     delete keyIsDown.list[65]
     assert.deepEquals(keyIsDown.listAllKeys(), vowels.slice(1), 'listAllKeys() returns an array of all keys down')
