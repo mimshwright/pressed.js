@@ -19,7 +19,7 @@ keyIsDown.any = (...keys) => {
   return keys.reduce((defined, key) => defined || list[key] !== undefined, false)
 }
 
-keyIsDown.listAllKeys = () => Object.keys(list).map(key => {return parseInt(key)})
+keyIsDown.listAllKeys = () => Object.keys(list).map(key => { return parseInt(key) })
 
 keyIsDown.start = (eventEmitter) => {
   if (!isListening) {
@@ -29,9 +29,9 @@ keyIsDown.start = (eventEmitter) => {
     if (!eventEmitter.addEventListener || !eventEmitter.removeEventListener) {
       throw new Error('Could not find a valid `eventEmitter` object (usually window). This code will not work outside of a browser environment (i.e. in node) unless you provide a valid object with addEventListener and removeEventListener that dispatches `keydown` and `keyup` events.')
     }
-    eventEmitter.addEventListener('keydown', onKeyDown, false)
-    eventEmitter.addEventListener('keyup', onKeyUp, false)
-    eventEmitter.addEventListener('blur', onBlur, false)
+    eventEmitter.addEventListener('keydown', onKeyDown)
+    eventEmitter.addEventListener('keyup', onKeyUp)
+    eventEmitter.addEventListener('blur', onBlur)
     keyIsDown.resetList()
     isListening = true
   }
