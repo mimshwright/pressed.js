@@ -5,6 +5,11 @@ Tracks which keys are currently pressed down.
 ## Usage
 
 ```
+// Initialize the system
+keyIsDown.start()
+
+// Later...
+
 // Check for a key code.
 if (keyIsDown(65)) {
   console.log('"A" key is currently pressed.')
@@ -20,6 +25,9 @@ if (keyIsDown.any(65, 69, 73, 79, 85)) {
 
 // List all keys currently pressed.
 console.log(keyIsDown.listAllKeys()) // ['76', '16']
+
+// When you're all done using it...
+keyIsDown.stop()
 
 ```
 
@@ -37,6 +45,9 @@ const myCustomEventEmitter = {
 }
 
 keyIsDown.start(myCustomEmitter)
+
+// Later...
+keyIsDown.stop(myCustomEmitter)
 ```
 
 [^1]: Node users may want to check out [keypress](https://www.npmjs.com/package/keypress).
