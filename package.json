@@ -2,13 +2,17 @@
   "name": "keyIsDown",
   "version": "1.0.0",
   "description": "A simple library for tracking which keyboard keys are currently down.",
-  "main": "keyIsDown.js",
+  "main": "src/keyIsDown.js",
   "repository": {
-    "url": "https://github.com/mimshwright/keyIsDown.js",
-    "type": "git"
+    "type": "git",
+    "url": "https://github.com/mimshwright/keyIsDown.js"
+  },
+  "bugs": {
+    "url" : "https://github.com/mimshwright/keyIsDown.js/issues"
   },
   "author": "Mims H. Wright",
   "license": "MIT",
+
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-plugin-transform-es2015-modules-umd": "^6.18.0",
@@ -19,6 +23,9 @@
     "tape": "^4.6.3",
     "tape-catch": "^1.0.6"
   },
+  "dependencies": {
+    "keycode": "^2.1.8"
+  },
   "scripts": {
     "lint": "standard './*.js' './src/**/*.js'",
     "fix": "standard --fix './*.js' './src/**/*.js'",
@@ -26,8 +33,5 @@
     "build": "babel src -d lib",
     "watch": "babel src -d lib --watch",
     "start": "npm run fix && npm run test && npm run build"
-  },
-  "dependencies": {
-    "keycode": "^2.1.8"
   }
 }
