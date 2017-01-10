@@ -32,7 +32,7 @@ keyIsDown.stop()
 ```
 
 ## Overriding `window`
-Normally, this module will not work outside of a browser environment[^1]. However, if for some reason you have some reason to force it to work, or if you just want to listen to events somewhere besides the `window` object, you can pass a custom object to the `start()` function with `addEventListener` and `removeEventListener` defined.
+Normally, this module will not work outside of a browser environment¹. However, if for some reason you want to force it to work, or if you just want to listen to events somewhere besides the `window` object, you can pass a custom object to the `start()` function with `addEventListener` and `removeEventListener` defined.
 
 ```
 const myCustomEventEmitter = {
@@ -50,6 +50,6 @@ keyIsDown.start(myCustomEmitter)
 keyIsDown.stop(myCustomEmitter)
 ```
 
-[^1]: Node users may want to check out [keypress](https://www.npmjs.com/package/keypress).
+¹: Node users may want to check out [keypress](https://www.npmjs.com/package/keypress).
 
 [![Standard - JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
