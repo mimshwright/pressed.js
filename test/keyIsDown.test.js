@@ -5,7 +5,7 @@ let vowels = [65, 69, 73, 79, 85]
 let emitter = { addEventListener: () => {}, removeEventListener: () => {} }
 
 test('Module:keyIsDown', (module) => {
-  test('keyIsDown.isListening() and keyIsDown.start() and keyIsDown.stop()', (assert) => {
+  test('keyIsDown.isListening(), keyIsDown.start() and keyIsDown.stop()', (assert) => {
     assert.ok(keyIsDown.isListening instanceof Function, 'keyIsDown.isListening() is a function')
     assert.equals(keyIsDown.isListening(), false, 'keyIsDown.isListening() is false by default')
 
@@ -29,10 +29,32 @@ test('Module:keyIsDown', (module) => {
 
     keyIsDown.start(emitter)
     assert.equal(keyIsDown(65), false, 'By default, nothing down.')
-    keyIsDown.list[65] = true
+    keyIsDown.list[65] = true // A
     assert.equal(keyIsDown(65), true, 'When key is down, it returns true')
-    delete keyIsDown.list[65]
+    assert.equal(keyIsDown('a'), true, 'Use strings or keycodes!')
+    keyIsDown.resetList()
     assert.equal(keyIsDown(65), false, 'Keys removed properly.')
+
+    keyIsDown.list[49] = true // 1
+    assert.equal(keyIsDown(49), true, 'Keycode for number works.')
+    assert.equal(keyIsDown(1), false, 'Beware! Digits 0-9 are treated as keycodes.')
+    assert.equal(keyIsDown('1'), true, 'Wrapping digits 0-9 in quotes solves the issue.')
+    keyIsDown.resetList()
+
+    keyIsDown.list[91] = true // cmd or windows
+    assert.equal(keyIsDown(91), true, 'Keycode for modifier key works.')
+    assert.equal(keyIsDown(93), false, 'Keycode for right modifier key doesn\'t work.')
+    assert.equal(keyIsDown('cmd'), true, 'String representation of modifier keys works.')
+    assert.equal(keyIsDown('⌘'), true, 'Symbol representation of modifier keys works.')
+    keyIsDown.resetList()
+    
+    keyIsDown.list[93] = true // right cmd or windows
+    assert.equal(keyIsDown('⌘'), false, 'String representation of modifier keys default to left key.')
+    assert.equal(keyIsDown('left command'), false, 'Left command doesn\'t register right command key.')
+    assert.equal(keyIsDown('right command'), true, 'Right command does register right command key.')
+
+    assert.throws(() => keyIsDown({}), 'keyIsDown() throws an error if parameter isn\'t a string or number.')
+
     keyIsDown.stop(emitter)
 
     assert.end()
@@ -61,6 +83,12 @@ test('Module:keyIsDown', (module) => {
     assert.ok(keyIsDown.all(...vowels), 'keyIsDown.all() is true when all values are down')
     delete keyIsDown.list[65]
     assert.notOk(keyIsDown.all(...vowels), 'keyIsDown.all() is false if any values are not down')
+
+    keyIsDown.resetList()
+    keyIsDown.list[91] = true // cmd or windows
+    keyIsDown.list[16] = true // shift
+    assert.ok(keyIsDown.all('shift', 'cmd'), 'keyIsDown.all() works with modifier keys')
+
     keyIsDown.stop(emitter)
 
     assert.end()
@@ -71,7 +99,7 @@ test('Module:keyIsDown', (module) => {
 
     keyIsDown.start(emitter)
     // hack list
-    vowels.map(key => { keyIsDown.list[key] = true } )
+    vowels.map(key => { keyIsDown.list[key] = true })
     assert.deepEquals(keyIsDown.listAllKeys(), vowels, 'listAllKeys() returns an array of all keys down')
     delete keyIsDown.list[65]
     assert.deepEquals(keyIsDown.listAllKeys(), vowels.slice(1), 'listAllKeys() returns an array of all keys down')
@@ -87,6 +115,15 @@ test('Module:keyIsDown', (module) => {
     assert.throws(() => keyIsDown.any(), 'Throws an error if start() hasn\'t been called')
 
     keyIsDown.start(emitter)
+    // hack list
+    keyIsDown.list[65] = true
+    assert.ok(keyIsDown.any(...vowels), 'keyIsDown.any() is true when all values are down')
+    assert.notOk(keyIsDown.any('f'), 'keyIsDown.any() is false if none of the values are down. Works with strings')
+
+    keyIsDown.resetList()
+    keyIsDown.list[91] = true // cmd or windows
+    keyIsDown.list[16] = true // shift
+    assert.ok(keyIsDown.any('shift'), 'keyIsDown.any() works with modifier keys')
     keyIsDown.stop(emitter)
 
     assert.end()

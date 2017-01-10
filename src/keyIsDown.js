@@ -1,8 +1,18 @@
+import keycode from 'keycode'
+
 let list = {}
 let isListening = false
 
 const keyIsDown = (key) => {
   checkForListener()
+
+  if (typeof (key) === 'string') {
+    key = keycode(key)
+  }
+
+  if (isNaN(key)) {
+    throw new Error('`key` must be either an integer key code or a string')
+  }
 
   return list[key] !== undefined
 }
@@ -10,13 +20,13 @@ const keyIsDown = (key) => {
 keyIsDown.all = (...keys) => {
   checkForListener()
 
-  return keys.reduce((defined, key) => defined && list[key] !== undefined, true)
+  return keys.reduce((defined, key) => defined && keyIsDown(key), true)
 }
 
 keyIsDown.any = (...keys) => {
   checkForListener()
 
-  return keys.reduce((defined, key) => defined || list[key] !== undefined, false)
+  return keys.reduce((defined, key) => defined || keyIsDown(key), false)
 }
 
 keyIsDown.listAllKeys = () => Object.keys(list).map(key => { return parseInt(key) })

@@ -1,6 +1,6 @@
-# keyIsDown.js
+# keyIsDown
 
-Tracks which keys are currently pressed down.
+Tracks which keys on the keyboard are currently being pressed. This is very useful in game development when you may want to respond to multiple key presses in your update loop.
 
 ## Usage
 
@@ -14,12 +14,26 @@ keyIsDown.start()
 if (keyIsDown(65)) {
   console.log('"A" key is currently pressed.')
 }
+// Works with strings too.
+if (keyIsDown("A")) {
+  console.log('"A" key is currently pressed.')
+}
+// Even works with unicode symbols for modifier keys!
+if (keyIsDown("⌘")) {
+  console.log('"Command" key (or windows key) is currently pressed.')
+}
+
+```
+
+String to keycode mappings use the [keycode module](https://npmjs.com/package/keycode). Here's a list of [all the supported strings to keycode mappings](https://gist.github.com/mimshwright/7b23464d7f63065400af319d04e7df6d).
+
+```
 
 // Check multiple keys at once
-if (keyIsDown.all(76, 16)) {
+if (keyIsDown.all("shift", "L")) {
   console.log('Both "Shift" and "L" are currently pressed.')
 }
-if (keyIsDown.any(65, 69, 73, 79, 85)) {
+if (keyIsDown.any("a", "e", "i", "o", "u")) {
   console.log('At least one vowel key is currently pressed.')
 }
 

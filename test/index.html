@@ -17,12 +17,20 @@
 
       <h2>Detects any vowel (A, E, I, O, U):</h2>
       <p id="any"></p>
+
+      <h2>Detects only left command / windows key:</h2>
+      <p id="leftCommand"></p>
+
+      <h2>Detects either (left or right) command / windows key:</h2>
+      <p id="anyCommand"></p>
     </main>
     <script type="text/javascript">
       var pressedKeyList = document.getElementById("pressedKeyList")
       var keyIsDown = keyIsDown.default;
       var all = document.getElementById("all")
       var any = document.getElementById("any")
+      var leftCommand = document.getElementById("leftCommand")
+      var anyCommand = document.getElementById("anyCommand")
       keyIsDown.start();
 
       function onFrame() {
@@ -36,6 +44,9 @@
         all.innerHTML = keyIsDown.all(76, 16) ? "Combo!" : emptyString;
 
         any.innerHTML = keyIsDown.any(65, 69, 73, 79, 85) ? "Vowel detected." : emptyString;
+
+        leftCommand.innerHTML = keyIsDown("command") ? "Command pressed!" : emptyString;
+        anyCommand.innerHTML = keyIsDown.any("left command", "right command") ? "Command pressed!" : emptyString;
       }
       window.requestAnimationFrame(onFrame)
     </script>
