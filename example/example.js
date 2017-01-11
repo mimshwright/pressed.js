@@ -89,10 +89,6 @@
 
 	'use strict';
 	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
 	var _keycode = __webpack_require__(2);
 	
 	var _keycode2 = _interopRequireDefault(_keycode);
@@ -229,7 +225,7 @@
 	  }
 	};
 	
-	exports.default = pressed;
+	module.exports = pressed;
 
 /***/ },
 /* 2 */

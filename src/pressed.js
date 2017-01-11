@@ -106,4 +106,4 @@ const checkForListener = () => {
   }
 }
 
-export default pressed
+module.exports = pressed
