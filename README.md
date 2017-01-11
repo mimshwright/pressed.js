@@ -4,6 +4,10 @@
 
 Tracks which keys on the keyboard are currently being pressed. This is very useful in game development when you may want to respond to multiple key presses in your update loop.
 
+## Example
+
+It works best to see a [live example](https://rawgit.com/mimshwright/pressed.js/master/example/index.html).
+
 ## Usage
 
 ```
@@ -42,7 +46,7 @@ if (pressed.some("a", "e", "i", "o", "u")) {
 
 // List all keys currently pressed.
 console.log(pressed.listAllKeys()) // E.g. ['L', 'shift']
-console.log(pressed.listAllKeyCodes()) // E.g. ['76', '16']
+console.log(pressed.listAllKeyCodes()) // E.g. [76, 16]
 
 // When you're all done using it...
 pressed.stop()
@@ -71,4 +75,4 @@ pressed.stop(myCustomEmitter)
 ¹: Node users may want to check out [keypress](https://www.npmjs.com/package/keypress).
 
 ### Weirdness
-- Caps Lock (key code 20) will appear pressed as long as it's on. If you call pressed.start() when the caps lock key is on, it won't appear pressed until after you turn it off and on again. 
+- Caps Lock (key code 20) will appear pressed as long as it's on. If you call pressed.start() when the caps lock key is on, it won't appear pressed until after you turn it off and on again.
