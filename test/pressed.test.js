@@ -168,5 +168,17 @@ test('Module:pressed', (module) => {
     assert.end()
   })
 
+  test('pressed.add() and pressed.remove()', (assert) => {
+    assert.ok(pressed.add instanceof Function, 'pressed.add() is a function for manually adding codes')
+    assert.equal(pressed.listAllKeyCodes().length, 0, 'Ensure list is empty.')
+    pressed.add(65)
+    assert.equal(pressed.listAllKeyCodes()[0], 65, 'Added 65 manually')
+
+    assert.ok(pressed.remove instanceof Function, 'pressed.remove() is a function for manually removing codes')
+    pressed.remove("a")
+    assert.equal(pressed.listAllKeyCodes().length, 0, 'Ensure list is empty. Strings work too.')
+    assert.end()
+  })
+
   module.end()
 })

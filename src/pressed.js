@@ -72,6 +72,18 @@ pressed.reset = () => {
   list = {}
   pressed.list = list
 }
+pressed.add = (key) => {
+  if (typeof(key) === "string") {
+    key = keycode(key)
+  }
+  list[key] = true
+}
+pressed.remove = (key) => {
+  if (typeof(key) === "string") {
+    key = keycode(key)
+  }
+  delete list[key]
+}
 
 const onKeyDown = (event) => {
   list[event.keyCode] = true
