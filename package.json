@@ -1,6 +1,6 @@
 {
   "name": "pressed",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "A simple library for tracking which keyboard keys are currently being pressed.",
   "keywords": "game, keyboard, keycode, pressed, keydown, keyup, polling, input, loop, es6",
   "main": "lib/pressed.js",
