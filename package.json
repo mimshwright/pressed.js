@@ -1,6 +1,6 @@
 {
   "name": "pressed",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple library for tracking which keyboard keys are currently being pressed.",
   "keywords": "game, keyboard, keycode, pressed, keydown, keyup, polling, input, loop, es6",
   "main": "dist/pressed.js",
@@ -13,7 +13,6 @@
   },
   "author": "Mims H. Wright",
   "license": "MIT",
-
   "devDependencies": {
     "babel-core": "^6.21.0",
     "babel-loader": "^6.2.10",
