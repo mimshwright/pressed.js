@@ -177,6 +177,12 @@ test('Module:pressed', (module) => {
     assert.ok(pressed.remove instanceof Function, 'pressed.remove() is a function for manually removing codes')
     pressed.remove('a')
     assert.equal(pressed.listAllKeyCodes().length, 0, 'Ensure list is empty. Strings work too.')
+
+    pressed.add('A', 'B', 'C')
+    assert.equal(pressed.listAllKeyCodes().length, 3, 'Add mulitple keys with one call.')
+    pressed.remove(65, 66, 67)
+    assert.equal(pressed.listAllKeyCodes().length, 0, 'Remove mulitple keys with one call')
+
     assert.end()
   })
 
