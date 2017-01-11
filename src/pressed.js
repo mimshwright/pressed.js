@@ -73,13 +73,13 @@ pressed.reset = () => {
   pressed.list = list
 }
 pressed.add = (key) => {
-  if (typeof(key) === "string") {
+  if (typeof (key) === 'string') {
     key = keycode(key)
   }
   list[key] = true
 }
 pressed.remove = (key) => {
-  if (typeof(key) === "string") {
+  if (typeof (key) === 'string') {
     key = keycode(key)
   }
   delete list[key]
