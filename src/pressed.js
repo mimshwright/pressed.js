@@ -83,7 +83,7 @@ pressed.add = (...keys) => {
 pressed.remove = (...keys) => {
   keys.map((key) => {
     if (typeof (key) === 'string') {
-      key = keycode(key) 
+      key = keycode(key)
     }
     delete list[key]
   })
