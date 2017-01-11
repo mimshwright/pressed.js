@@ -3,7 +3,7 @@
   "version": "1.0.3",
   "description": "A simple library for tracking which keyboard keys are currently being pressed.",
   "keywords": "game, keyboard, keycode, pressed, keydown, keyup, polling, input, loop, es6",
-  "main": "dist/pressed.js",
+  "main": "lib/pressed.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/mimshwright/pressed.js"
