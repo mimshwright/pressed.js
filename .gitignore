@@ -1,6 +1,5 @@
 # Project-specific
-dist/**/*.js
-dist/**/*.js.map
+lib
 
 # Logs
 logs
