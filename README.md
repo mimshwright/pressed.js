@@ -1,5 +1,6 @@
 # pressed.js
 
+[![npm version](https://badge.fury.io/js/pressed.svg)](https://badge.fury.io/js/pressed)
 [![Standard - JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
 Tracks which keys on the keyboard are currently being pressed. This is very useful in game development when you may want to respond to multiple key presses in your update loop.
