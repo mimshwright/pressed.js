@@ -1,25 +1,28 @@
-# keyIsDown
+# pressed.js
+
+[![Standard - JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
 Tracks which keys on the keyboard are currently being pressed. This is very useful in game development when you may want to respond to multiple key presses in your update loop.
 
 ## Usage
 
 ```
+import pressed from "pressed"
 // Initialize the system
-keyIsDown.start()
+pressed.start()
 
 // Later...
 
 // Check for a key code.
-if (keyIsDown(65)) {
+if (pressed(65)) {
   console.log('"A" key is currently pressed.')
 }
 // Works with strings too.
-if (keyIsDown("A")) {
+if (pressed("A")) {
   console.log('"A" key is currently pressed.')
 }
 // Even works with unicode symbols for modifier keys!
-if (keyIsDown("⌘")) {
+if (pressed("⌘")) {
   console.log('"Command" key (or windows key) is currently pressed.')
 }
 
@@ -30,18 +33,19 @@ String to keycode mappings use the [keycode module](https://npmjs.com/package/ke
 ```
 
 // Check multiple keys at once
-if (keyIsDown.all("shift", "L")) {
+if (pressed.every("shift", "L")) {
   console.log('Both "Shift" and "L" are currently pressed.')
 }
-if (keyIsDown.any("a", "e", "i", "o", "u")) {
+if (pressed.some("a", "e", "i", "o", "u")) {
   console.log('At least one vowel key is currently pressed.')
 }
 
 // List all keys currently pressed.
-console.log(keyIsDown.listAllKeys()) // ['76', '16']
+console.log(pressed.listAllKeys()) // E.g. ['L', 'shift']
+console.log(pressed.listAllKeyCodes()) // E.g. ['76', '16']
 
 // When you're all done using it...
-keyIsDown.stop()
+pressed.stop()
 
 ```
 
@@ -58,12 +62,13 @@ const myCustomEventEmitter = {
   }
 }
 
-keyIsDown.start(myCustomEmitter)
+pressed.start(myCustomEmitter)
 
 // Later...
-keyIsDown.stop(myCustomEmitter)
+pressed.stop(myCustomEmitter)
 ```
 
 ¹: Node users may want to check out [keypress](https://www.npmjs.com/package/keypress).
 
-[![Standard - JavaScript Style Guide](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+### Weirdness
+- Caps Lock (key code 20) will appear pressed as long as it's on. If you call pressed.start() when the caps lock key is on, it won't appear pressed until after you turn it off and on again. 

@@ -3,13 +3,27 @@ import keycode from 'keycode'
 let list = {}
 let isListening = false
 
-const keyIsDown = (key) => {
+const LEFT_COMMAND_STRING = 'left command'
+const LEFT_COMMAND = 91
+const RIGHT_COMMAND = 93
+
+const pressed = (key) => {
   checkForListener()
+  const checkList = (key) => list[key] !== undefined
 
   if (typeof (key) === 'string') {
-    const code = keycode(key)
+    let code = keycode(key)
     if (isNaN(code)) {
       throw new Error(key + ' is not a supported key name.')
+    }
+
+    // Special case for modifier key strings:
+    // String representations of command should return true when either the
+    // Left or Right Command key is pressed (unless the side is specified).
+    if (code === 91) {
+      if (key !== LEFT_COMMAND_STRING) {
+        return checkList(LEFT_COMMAND) || checkList(RIGHT_COMMAND)
+      }
     }
     key = code
   }
@@ -18,24 +32,27 @@ const keyIsDown = (key) => {
     throw new Error('`key` must be either an integer key code or a string.')
   }
 
-  return list[key] !== undefined
+  return checkList(key)
 }
 
-keyIsDown.all = (...keys) => {
+pressed.key = (key) => pressed(key)
+
+pressed.every = (...keys) => {
   checkForListener()
 
-  return keys.reduce((defined, key) => defined && keyIsDown(key), true)
+  return keys.reduce((defined, key) => defined && pressed(key), true)
 }
 
-keyIsDown.any = (...keys) => {
+pressed.some = (...keys) => {
   checkForListener()
 
-  return keys.reduce((defined, key) => defined || keyIsDown(key), false)
+  return keys.reduce((defined, key) => defined || pressed(key), false)
 }
 
-keyIsDown.listAllKeys = () => Object.keys(list).map(key => { return parseInt(key) })
+pressed.listAllKeyCodes = () => Object.keys(list).map(key => { return parseInt(key) })
+pressed.listAllKeys = () => pressed.listAllKeyCodes().map(keycode)
 
-keyIsDown.start = (eventEmitter) => {
+pressed.start = (eventEmitter) => {
   if (!isListening) {
     if (!eventEmitter && undefined !== window) {
       eventEmitter = window
@@ -46,14 +63,14 @@ keyIsDown.start = (eventEmitter) => {
     eventEmitter.addEventListener('keydown', onKeyDown)
     eventEmitter.addEventListener('keyup', onKeyUp)
     eventEmitter.addEventListener('blur', onBlur)
-    keyIsDown.resetList()
+    pressed.reset()
     isListening = true
   }
 }
 
-keyIsDown.resetList = () => {
+pressed.reset = () => {
   list = {}
-  keyIsDown.list = list
+  pressed.list = list
 }
 
 const onKeyDown = (event) => {
@@ -63,10 +80,10 @@ const onKeyUp = (event) => {
   delete list[event.keyCode]
 }
 const onBlur = (event) => {
-  keyIsDown.resetList()
+  pressed.reset()
 }
 
-keyIsDown.stop = (eventEmitter) => {
+pressed.stop = (eventEmitter) => {
   if (isListening) {
     if (!eventEmitter && undefined !== window) {
       eventEmitter = window
@@ -75,18 +92,18 @@ keyIsDown.stop = (eventEmitter) => {
       eventEmitter.removeEventListener('keydown', onKeyDown)
       eventEmitter.removeEventListener('keyup', onKeyUp)
       eventEmitter.removeEventListener('blur', onBlur)
-      keyIsDown.resetList()
+      pressed.reset()
       isListening = false
     }
   }
 }
 
-keyIsDown.isListening = () => isListening
+pressed.isListening = () => isListening
 
 const checkForListener = () => {
   if (!isListening) {
-    throw new Error('Key listener is not running. You must run keyIsDown.start() to initialize the tracker.')
+    throw new Error('Key listener is not running. You must run pressed.start() to initialize the tracker.')
   }
 }
 
-export default keyIsDown
+export default pressed

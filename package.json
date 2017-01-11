@@ -1,17 +1,18 @@
 {
-  "name": "keyIsDown",
+  "name": "pressed",
   "version": "1.0.0",
-  "description": "A simple library for tracking which keyboard keys are currently down.",
-  "main": "src/keyIsDown.js",
+  "description": "A simple library for tracking which keyboard keys are currently being pressed.",
+  "main": "dist/pressed.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mimshwright/keyIsDown.js"
+    "url": "https://github.com/mimshwright/pressed.js"
   },
   "bugs": {
-    "url": "https://github.com/mimshwright/keyIsDown.js/issues"
+    "url": "https://github.com/mimshwright/pressed.js/issues"
   },
   "author": "Mims H. Wright",
   "license": "MIT",
+
   "devDependencies": {
     "babel-core": "^6.21.0",
     "babel-loader": "^6.2.10",
@@ -30,9 +31,11 @@
     "lint": "standard './*.js' './src/**/*.js'",
     "fix": "standard --fix './*.js' './src/**/*.js'",
     "test": "tape -r babel-register test/**/*.test.js | tap-spec",
-    "build": "webpack --config webpack.config.babel.js",
+    "build": "babel src/pressed.js -o lib/pressed.js",
+    "prepublish": "npm run lint && npm run test && npm run build",
+    "build-example": "webpack --config webpack.config.babel.js",
     "watch": "webpack --watch --config webpack.config.babel.js",
     "example": "open example/index.html",
-    "start": "npm run fix && npm run test && npm run build"
+    "start": "npm run fix && npm run test && npm run watch"
   }
 }

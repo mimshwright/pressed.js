@@ -46,35 +46,40 @@
 
 	'use strict';
 	
-	var _keyIsDown = __webpack_require__(1);
+	var _pressed = __webpack_require__(1);
 	
-	var _keyIsDown2 = _interopRequireDefault(_keyIsDown);
+	var _pressed2 = _interopRequireDefault(_pressed);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	_keyIsDown2.default.start();
+	_pressed2.default.start();
 	
 	var pressedKeyList = document.getElementById('pressedKeyList');
-	var all = document.getElementById('all');
-	var any = document.getElementById('any');
+	var pressedKeyCodeList = document.getElementById('pressedKeyCodeList');
+	var every = document.getElementById('every');
+	var some = document.getElementById('some');
 	var leftCommand = document.getElementById('leftCommand');
 	var anyCommand = document.getElementById('anyCommand');
 	
 	function onFrame() {
-	  // console.log(keyIsDown.list);
+	  // console.log(pressed.list);
 	  var waitingString = '❌';
-	  var checkString = '✅ ';
+	  var detectedString = '✅ ';
 	
-	  var downKeys = _keyIsDown2.default.listAllKeys();
-	  pressedKeyList.innerHTML = downKeys.length ? checkString + downKeys : waitingString;
+	  var downKeys = _pressed2.default.listAllKeys();
+	  var downKeyCodes = _pressed2.default.listAllKeyCodes();
+	
+	  pressedKeyList.innerHTML = downKeys.length ? detectedString + downKeys.join(', ') : waitingString;
+	  pressedKeyCodeList.innerHTML = downKeyCodes.length ? detectedString + downKeyCodes.join(', ') : waitingString;
+	
+	  every.innerHTML = _pressed2.default.every('L', 'shift') ? detectedString + 'Combo!' : waitingString;
+	
+	  some.innerHTML = _pressed2.default.some('a', 'e', 'i', 'o', 'u') ? detectedString + 'Vowel detected.' : waitingString;
+	
+	  leftCommand.innerHTML = (0, _pressed2.default)('left command') ? detectedString + 'Left Meta Key pressed!' : waitingString;
+	  anyCommand.innerHTML = _pressed2.default.some('command') ? detectedString + 'Meta Key pressed!' : waitingString;
+	
 	  window.requestAnimationFrame(onFrame);
-	
-	  all.innerHTML = _keyIsDown2.default.all('L', 'shift') ? checkString + 'Combo!' : waitingString;
-	
-	  any.innerHTML = _keyIsDown2.default.any('a', 'e', 'i', 'o', 'u') ? checkString + 'Vowel detected.' : waitingString;
-	
-	  leftCommand.innerHTML = (0, _keyIsDown2.default)('command') ? checkString + 'Command pressed!' : waitingString;
-	  anyCommand.innerHTML = _keyIsDown2.default.any('left command', 'right command') ? checkString + 'Command pressed!' : waitingString;
 	}
 	window.requestAnimationFrame(onFrame);
 
@@ -97,13 +102,29 @@
 	var list = {};
 	var isListening = false;
 	
-	var keyIsDown = function keyIsDown(key) {
+	var LEFT_COMMAND_STRING = 'left command';
+	var LEFT_COMMAND = 91;
+	var RIGHT_COMMAND = 93;
+	
+	var pressed = function pressed(key) {
 	  checkForListener();
+	  var checkList = function checkList(key) {
+	    return list[key] !== undefined;
+	  };
 	
 	  if (typeof key === 'string') {
 	    var code = (0, _keycode2.default)(key);
 	    if (isNaN(code)) {
 	      throw new Error(key + ' is not a supported key name.');
+	    }
+	
+	    // Special case for modifier key strings:
+	    // String representations of command should return true when either the
+	    // Left or Right Command key is pressed (unless the side is specified).
+	    if (code === 91) {
+	      if (key !== LEFT_COMMAND_STRING) {
+	        return checkList(LEFT_COMMAND) || checkList(RIGHT_COMMAND);
+	      }
 	    }
 	    key = code;
 	  }
@@ -112,10 +133,14 @@
 	    throw new Error('`key` must be either an integer key code or a string.');
 	  }
 	
-	  return list[key] !== undefined;
+	  return checkList(key);
 	};
 	
-	keyIsDown.all = function () {
+	pressed.key = function (key) {
+	  return pressed(key);
+	};
+	
+	pressed.every = function () {
 	  for (var _len = arguments.length, keys = Array(_len), _key = 0; _key < _len; _key++) {
 	    keys[_key] = arguments[_key];
 	  }
@@ -123,11 +148,11 @@
 	  checkForListener();
 	
 	  return keys.reduce(function (defined, key) {
-	    return defined && keyIsDown(key);
+	    return defined && pressed(key);
 	  }, true);
 	};
 	
-	keyIsDown.any = function () {
+	pressed.some = function () {
 	  for (var _len2 = arguments.length, keys = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
 	    keys[_key2] = arguments[_key2];
 	  }
@@ -135,17 +160,20 @@
 	  checkForListener();
 	
 	  return keys.reduce(function (defined, key) {
-	    return defined || keyIsDown(key);
+	    return defined || pressed(key);
 	  }, false);
 	};
 	
-	keyIsDown.listAllKeys = function () {
+	pressed.listAllKeyCodes = function () {
 	  return Object.keys(list).map(function (key) {
 	    return parseInt(key);
 	  });
 	};
+	pressed.listAllKeys = function () {
+	  return pressed.listAllKeyCodes().map(_keycode2.default);
+	};
 	
-	keyIsDown.start = function (eventEmitter) {
+	pressed.start = function (eventEmitter) {
 	  if (!isListening) {
 	    if (!eventEmitter && undefined !== window) {
 	      eventEmitter = window;
@@ -156,14 +184,14 @@
 	    eventEmitter.addEventListener('keydown', onKeyDown);
 	    eventEmitter.addEventListener('keyup', onKeyUp);
 	    eventEmitter.addEventListener('blur', onBlur);
-	    keyIsDown.resetList();
+	    pressed.reset();
 	    isListening = true;
 	  }
 	};
 	
-	keyIsDown.resetList = function () {
+	pressed.reset = function () {
 	  list = {};
-	  keyIsDown.list = list;
+	  pressed.list = list;
 	};
 	
 	var onKeyDown = function onKeyDown(event) {
@@ -173,10 +201,10 @@
 	  delete list[event.keyCode];
 	};
 	var onBlur = function onBlur(event) {
-	  keyIsDown.resetList();
+	  pressed.reset();
 	};
 	
-	keyIsDown.stop = function (eventEmitter) {
+	pressed.stop = function (eventEmitter) {
 	  if (isListening) {
 	    if (!eventEmitter && undefined !== window) {
 	      eventEmitter = window;
@@ -185,23 +213,23 @@
 	      eventEmitter.removeEventListener('keydown', onKeyDown);
 	      eventEmitter.removeEventListener('keyup', onKeyUp);
 	      eventEmitter.removeEventListener('blur', onBlur);
-	      keyIsDown.resetList();
+	      pressed.reset();
 	      isListening = false;
 	    }
 	  }
 	};
 	
-	keyIsDown.isListening = function () {
+	pressed.isListening = function () {
 	  return isListening;
 	};
 	
 	var checkForListener = function checkForListener() {
 	  if (!isListening) {
-	    throw new Error('Key listener is not running. You must run keyIsDown.start() to initialize the tracker.');
+	    throw new Error('Key listener is not running. You must run pressed.start() to initialize the tracker.');
 	  }
 	};
 	
-	exports.default = keyIsDown;
+	exports.default = pressed;
 
 /***/ },
 /* 2 */
