@@ -31,6 +31,11 @@ if (pressed("⌘")) {
   console.log('"Command" key (or windows key) is currently pressed.')
 }
 
+// Mouse buttons (0-4) are tracked too.
+if (pressed.mouseButton(0)) { // pressed("mouse 0") also works
+  console.log('Left mouse button is currently pressed.')
+}
+
 ```
 
 String to keycode mappings use the [keycode module](https://npmjs.com/package/keycode). Here's a list of [all the supported strings to keycode mappings](https://gist.github.com/mimshwright/7b23464d7f63065400af319d04e7df6d).
