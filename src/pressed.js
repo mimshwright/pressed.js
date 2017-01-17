@@ -142,10 +142,10 @@ const onKeyUp = ({keyCode}) => {
   delete list[keyCode]
 }
 const onMouseDown = ({button}) => {
-  onKeyDown({keyCode:button})
+  onKeyDown({keyCode: button})
 }
 const onMouseUp = ({button}) => {
-  onKeyUp({keyCode:button})
+  onKeyUp({keyCode: button})
 }
 
 const onBlur = (event) => {
