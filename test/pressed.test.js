@@ -23,16 +23,6 @@ test('Module:pressed', (module) => {
     assert.end()
   })
 
-  test('pressed.key()', (assert) => {
-    assert.ok(pressed.key instanceof Function, 'pressed.key() is a more explicit alias for pressed()')
-    pressed.start(emitter)
-    pressed.list[65] = true // A
-    assert.equal(pressed.key(65), true, 'When key is down, it returns true')
-    assert.equal(pressed.key('A'), true, 'Works with strings')
-    pressed.stop(emitter)
-    assert.end()
-  })
-
   test('pressed()', (assert) => {
     assert.ok(pressed instanceof Function, 'pressed() is a function')
     assert.throws(() => pressed(), 'pressed() throws an error if start() hasn\'t been called')
@@ -71,6 +61,43 @@ test('Module:pressed', (module) => {
 
     pressed.stop(emitter)
 
+    assert.end()
+  })
+
+  test('pressed.key()', (assert) => {
+    assert.ok(pressed.key instanceof Function, 'pressed.key() is a more explicit alias for pressed()')
+    pressed.start(emitter)
+    pressed.list[65] = true // A
+    assert.equal(pressed.key(65), true, 'When key is down, it returns true')
+    assert.equal(pressed.key('A'), true, 'Works with strings')
+    pressed.stop(emitter)
+    assert.end()
+  })
+
+  test('Mouse Buttons', (assert) => {
+    assert.ok(pressed.mouseButton instanceof Function, 'pressed.mouseButton() is a more explicit alias for pressed()')
+    pressed.start(emitter)
+    pressed.add(0) // Mouse butotn 0
+    assert.equal(pressed.list[0], true, 'Add adds mouse buttons to list correctly')
+    assert.throws(() => { pressed.key(0) }, 'Key() should not work with mouse buttons')
+    assert.equal(pressed(0), true, 'Pressed should work with mouse buttons')
+    assert.equal(pressed('mouse 0'), true, '"Mouse 0" is the string for mouse 0')
+    assert.equal(pressed.mouseButton(0), true, 'mouseButton() function works correctly')
+    assert.throws(() => { pressed.mouseButton('mouse 0') }, 'mouseButton() just works with ints')
+    pressed.add(2)
+    assert.equal(pressed.some(0, 1, 2, 3), true, 'some() works as expected with mouse buttns')
+    assert.equal(pressed.every('mouse 0', 'mouse 2'), true, 'every() works as expected with mouse buttns')
+    pressed.remove(0)
+    assert.equal(pressed(0), false, 'Remove works properly for mouse buttons')
+    assert.equal(pressed.every('mouse 0', 'mouse 2'), false, 'every() works as expected with mouse buttns')
+    pressed.remove(2)
+    pressed.add(5) // Bogus mouse button
+    assert.throws(() => { pressed('mouse 5') }, 'Mouse buttons 0-4 are the only ones supported (pressed()).')
+    assert.throws(() => { pressed.mouseButton(5) }, 'Mouse buttons 0-4 are the only ones supported (mouseButton()).')
+    pressed.add(65) // 'A'
+    assert.throws(() => { pressed.mouseButton(65) }, 'mouseButton() just works with mouse buttons, not keys')
+    pressed.stop(emitter)
+    pressed.reset()
     assert.end()
   })
 

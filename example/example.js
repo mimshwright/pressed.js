@@ -60,6 +60,9 @@
 	var some = document.getElementById('some');
 	var leftCommand = document.getElementById('leftCommand');
 	var anyCommand = document.getElementById('anyCommand');
+	var mouse0 = document.getElementById('mouse0');
+	var mouse2 = document.getElementById('mouse2');
+	var anyMouse = document.getElementById('anyMouse');
 	
 	function onFrame() {
 	  // console.log(pressed.list);
@@ -79,9 +82,17 @@
 	  leftCommand.innerHTML = (0, _pressed2.default)('left command') ? detectedString + 'Left Meta Key pressed!' : waitingString;
 	  anyCommand.innerHTML = _pressed2.default.some('command') ? detectedString + 'Meta Key pressed!' : waitingString;
 	
+	  mouse0.innerHTML = (0, _pressed2.default)('mouse 0') ? detectedString + 'Left mouse button pressed!' : waitingString;
+	  mouse2.innerHTML = _pressed2.default.some('mouse 2') ? detectedString + 'Right mouse button pressed' : waitingString;
+	  anyMouse.innerHTML = _pressed2.default.some('mouse 0', 'mouse 1', 'mouse 2', 'mouse 3', 'mouse 4') ? detectedString + 'Some mouse button pressed!' : waitingString;
+	
 	  window.requestAnimationFrame(onFrame);
 	}
 	window.requestAnimationFrame(onFrame);
+	
+	window.oncontextmenu = function () {
+	  return false;
+	};
 
 /***/ },
 /* 1 */
@@ -101,6 +112,33 @@
 	var LEFT_COMMAND_STRING = 'left command';
 	var LEFT_COMMAND = 91;
 	var RIGHT_COMMAND = 93;
+	var HIGHEST_MOUSE_CODE = 4;
+	
+	var mousecode = function mousecode(code) {
+	  if (typeof code === 'string') {
+	    if (code.toLowerCase().search(/mouse /) === 0) {
+	      // return the mouse button code
+	      code = code.charAt(6);
+	      if (code >= 0 && code <= HIGHEST_MOUSE_CODE) {
+	        return code;
+	      }
+	    }
+	  }
+	  if (typeof code === 'number') {
+	    if (code >= 0 && code <= HIGHEST_MOUSE_CODE) {
+	      return 'mouse ' + code;
+	    }
+	  }
+	  return null;
+	};
+	
+	var mouseAndKeyCode = function mouseAndKeyCode(key) {
+	  var code = mousecode(key);
+	  if (code !== null) {
+	    return code;
+	  }
+	  return (0, _keycode2.default)(key);
+	};
 	
 	var pressed = function pressed(key) {
 	  checkForListener();
@@ -109,7 +147,7 @@
 	  };
 	
 	  if (typeof key === 'string') {
-	    var code = (0, _keycode2.default)(key);
+	    var code = mouseAndKeyCode(key);
 	    if (isNaN(code)) {
 	      throw new Error(key + ' is not a supported key name.');
 	    }
@@ -133,7 +171,21 @@
 	};
 	
 	pressed.key = function (key) {
+	  if (mousecode(key)) {
+	    throw new Error('pressed.key() only accepts key strings or ints. For mouse clicks, use pressed.mosueButton()');
+	  }
 	  return pressed(key);
+	};
+	
+	pressed.mouseButton = function (code) {
+	  if (typeof code !== 'number') {
+	    throw new Error('pressed.mouseButton() only accepts integer arguments.');
+	  }
+	  code = mousecode(code);
+	  if (code === null) {
+	    throw new Error('pressed.mouseButton() only works with mouseCodes 0-4');
+	  }
+	  return pressed(code);
 	};
 	
 	pressed.every = function () {
@@ -180,6 +232,8 @@
 	    eventEmitter.addEventListener('keydown', onKeyDown);
 	    eventEmitter.addEventListener('keyup', onKeyUp);
 	    eventEmitter.addEventListener('blur', onBlur);
+	    eventEmitter.addEventListener('mousedown', onMouseDown);
+	    eventEmitter.addEventListener('mouseup', onMouseUp);
 	    pressed.reset();
 	    isListening = true;
 	  }
@@ -189,13 +243,52 @@
 	  list = {};
 	  pressed.list = list;
 	};
+	pressed.add = function () {
+	  for (var _len3 = arguments.length, keys = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+	    keys[_key3] = arguments[_key3];
+	  }
 	
-	var onKeyDown = function onKeyDown(event) {
-	  list[event.keyCode] = true;
+	  keys.map(function (key) {
+	    if (typeof key === 'string') {
+	      key = (0, _keycode2.default)(key);
+	    }
+	    list[key] = true;
+	  });
 	};
-	var onKeyUp = function onKeyUp(event) {
-	  delete list[event.keyCode];
+	pressed.remove = function () {
+	  for (var _len4 = arguments.length, keys = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+	    keys[_key4] = arguments[_key4];
+	  }
+	
+	  keys.map(function (key) {
+	    if (typeof key === 'string') {
+	      key = (0, _keycode2.default)(key);
+	    }
+	    delete list[key];
+	  });
 	};
+	
+	var onKeyDown = function onKeyDown(_ref) {
+	  var keyCode = _ref.keyCode;
+	
+	  list[keyCode] = true;
+	};
+	var onKeyUp = function onKeyUp(_ref2) {
+	  var keyCode = _ref2.keyCode;
+	
+	  delete list[keyCode];
+	};
+	var onMouseDown = function onMouseDown(_ref3) {
+	  var button = _ref3.button;
+	
+	  onKeyDown({ keyCode: button });
+	};
+	var onMouseUp = function onMouseUp(_ref4) {
+	  var button = _ref4.button;
+	
+	  onKeyUp({ keyCode: button });
+	};
+	
 	var onBlur = function onBlur(event) {
 	  pressed.reset();
 	};
