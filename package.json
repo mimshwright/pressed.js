@@ -26,6 +26,10 @@
   "dependencies": {
     "keycode": "^2.1.8"
   },
+  "optionalDependencies": {
+    "nyc": "^10.1.2",
+    "yarn": "^0.19.1"
+  },
   "scripts": {
     "lint": "standard './*.js' './src/**/*.js'",
     "fix": "standard --fix './*.js' './src/**/*.js'",
@@ -53,9 +57,5 @@
       "babel-register"
     ],
     "babel": "inherit"
-  },
-  "optionalDependencies": {
-    "nyc": "^10.1.2",
-    "yarn": "^0.19.1"
   }
 }
