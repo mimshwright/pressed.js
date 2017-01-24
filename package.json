@@ -29,7 +29,8 @@
   "scripts": {
     "lint": "standard './*.js' './src/**/*.js'",
     "fix": "standard --fix './*.js' './src/**/*.js'",
-    "test": "ava -v",
+    "test": "ava",
+    "coverage": "nyc yarn test",
     "build": "babel src/pressed.js -o lib/pressed.js",
     "prepublish": "npm run lint && npm run test && npm run build",
     "build-example": "webpack --config webpack.config.babel.js",
@@ -52,5 +53,9 @@
       "babel-register"
     ],
     "babel": "inherit"
+  },
+  "optionalDependencies": {
+    "nyc": "^10.1.2",
+    "yarn": "^0.19.1"
   }
 }
