@@ -5,6 +5,7 @@
 
 Tracks which keys on the keyboard are currently being pressed. This is very useful in game development when you may want to respond to multiple key presses in your update loop.
 
+
 ## Example
 
 It works best to see a [live example](https://rawgit.com/mimshwright/pressed.js/master/example/index.html).
